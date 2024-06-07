@@ -9,7 +9,7 @@ namespace BromEngine {
         void run();
 
     private:
-        Vulkan::Window window{ 800, 600 };
+        Vulkan::Window window{800, 600};
     };
 
-} // BromEngine
+}

@@ -1,12 +1,22 @@
 #include "Instance.h"
 
 namespace Vulkan {
+
+    Instance::Instance(bool enableValidationLayers) {
+        createInstance(enableValidationLayers);
+        debug = new Debug{enableValidationLayers, instance};
+    }
+
+    Instance::~Instance() {
+        delete debug;
+    }
+
     std::vector<const char *> Instance::getRequiredExtensions(bool enableValidationLayers) {
         uint32_t glfwExtensionCount = 0;
-        const char** glfwExtensions;
+        const char **glfwExtensions;
         glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
 
-        std::vector<const char*> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
+        std::vector<const char *> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
 
         if (enableValidationLayers) {
             extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
@@ -42,7 +52,7 @@ namespace Vulkan {
             createInfo.ppEnabledLayerNames = validationLayers.data();
 
             debugCreateInfo = Debug::populateDebugMessengerCreateInfo();
-            createInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT*) &debugCreateInfo;
+            createInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT *) &debugCreateInfo;
         } else {
             createInfo.enabledLayerCount = 0;
 
@@ -61,10 +71,10 @@ namespace Vulkan {
         std::vector<VkLayerProperties> availableLayers(layerCount);
         vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
 
-        for (const char* layerName : validationLayers) {
+        for (const char *layerName: validationLayers) {
             bool layerFound = false;
 
-            for (const auto& layerProperties : availableLayers) {
+            for (const auto &layerProperties: availableLayers) {
                 if (strcmp(layerName, layerProperties.layerName) == 0) {
                     layerFound = true;
                     break;
