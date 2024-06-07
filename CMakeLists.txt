@@ -3,7 +3,18 @@ project(VulkanTutorial)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(VulkanTutorial main.cpp)
+add_executable(VulkanTutorial main.cpp
+        App.cpp
+        App.h
+        App.h
+        Vulkan/Window.cpp
+        Vulkan/Window.h
+        Vulkan/Device.cpp
+        Vulkan/Device.h
+        Vulkan/Instance.cpp
+        Vulkan/Instance.h
+        Vulkan/Debug.cpp
+        Vulkan/Debug.h)
 
 find_package(Vulkan REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE Vulkan::Vulkan)
