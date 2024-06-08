@@ -9,12 +9,16 @@ add_executable(VulkanTutorial main.cpp
         App.h
         Vulkan/Window.cpp
         Vulkan/Window.h
-        Vulkan/Device.cpp
-        Vulkan/Device.h
+        Vulkan/PhysicalDevice.cpp
+        Vulkan/PhysicalDevice.h
         Vulkan/Instance.cpp
         Vulkan/Instance.h
         Vulkan/Debug.cpp
-        Vulkan/Debug.h)
+        Vulkan/Debug.h
+        Vulkan/LogicalDevice.cpp
+        Vulkan/LogicalDevice.h
+        Vulkan/LogicalDevice.h
+        Vulkan/LogicalDevice.cpp)
 
 find_package(Vulkan REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE Vulkan::Vulkan)

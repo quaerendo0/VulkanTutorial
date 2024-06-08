@@ -4,11 +4,12 @@ namespace Vulkan {
 
     Instance::Instance(bool enableValidationLayers) {
         createInstance(enableValidationLayers);
-        debug = new Debug{enableValidationLayers, instance};
+        debug = std::make_unique<Debug>(enableValidationLayers, instance);
+        physicalDevice = std::make_unique<PhysicalDevice>(instance);
+        logicalDevice = std::make_unique<LogicalDevice>(physicalDevice.get(), validationLayers, enableValidationLayers);
     }
 
     Instance::~Instance() {
-        delete debug;
     }
 
     std::vector<const char *> Instance::getRequiredExtensions(bool enableValidationLayers) {

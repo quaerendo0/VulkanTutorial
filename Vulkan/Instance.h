@@ -6,7 +6,11 @@
 #include <stdexcept>
 #include <vector>
 #include <iostream>
+#include <memory>
+
 #include "Debug.h"
+#include "PhysicalDevice.h"
+#include "LogicalDevice.h"
 
 namespace Vulkan {
 
@@ -22,12 +26,13 @@ namespace Vulkan {
         };
 
         VkInstance instance = nullptr;
-        Debug *debug = nullptr;
+
+        std::unique_ptr<Debug> debug;
+        std::unique_ptr<PhysicalDevice> physicalDevice;
+        std::unique_ptr<LogicalDevice> logicalDevice;
 
         static std::vector<const char *> getRequiredExtensions(bool enableValidationLayers);
-
         void createInstance(bool enableValidationLayers);
-
         bool checkValidationLayerSupport();
     };
 
