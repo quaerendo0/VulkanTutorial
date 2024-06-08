@@ -6,10 +6,10 @@
 #include "LogicalDevice.h"
 
 namespace Vulkan {
-    LogicalDevice::LogicalDevice(PhysicalDevice* physicalDevice,
+    LogicalDevice::LogicalDevice(PhysicalDevice& physicalDevice,
                                  const std::vector<const char *>& validationLayers,
                                  bool enableValidationLayers) {
-        auto queueFamilyIndex = (physicalDevice->getQueueFamilies()).graphicsFamilyIndex.value();
+        auto queueFamilyIndex = (physicalDevice.getQueueFamilies()).graphicsFamilyIndex.value();
 
         VkDeviceQueueCreateInfo queueCreateInfo{};
         queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
@@ -34,7 +34,7 @@ namespace Vulkan {
             createInfo.enabledLayerCount = 0;
         }
 
-        if (vkCreateDevice(physicalDevice->getPhysicalDevicePtr(), &createInfo, nullptr, &device) != VK_SUCCESS) {
+        if (vkCreateDevice(physicalDevice.getPhysicalDevicePtr(), &createInfo, nullptr, &device) != VK_SUCCESS) {
             throw std::runtime_error("failed to create logical physicalDevice!");
         }
     }

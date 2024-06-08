@@ -8,7 +8,7 @@ namespace Vulkan {
     class LogicalDevice {
 
     public:
-        LogicalDevice(PhysicalDevice* physicalDevice,
+        LogicalDevice(PhysicalDevice& physicalDevice,
                       const std::vector<const char *>& validationLayers,
                       bool enableValidationLayers);
 
