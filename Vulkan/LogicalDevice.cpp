@@ -18,15 +18,14 @@ namespace Vulkan {
         if (vkCreateDevice(physicalDevice.getPhysicalDevicePtr(), &createInfo, nullptr, &device) != VK_SUCCESS) {
             throw std::runtime_error("failed to create logical device!");
         }
-
-        initializeGraphicsQueue(queueFamilyIndex);
     }
 
     LogicalDevice::~LogicalDevice() {
         vkDestroyDevice(device, nullptr);
     }
 
-    VkDeviceQueueCreateInfo LogicalDevice::generateVkDeviceQueueCreateInfoStruct(PhysicalDevice &physicalDevice, unsigned int queueFamilyIndex) {
+    VkDeviceQueueCreateInfo LogicalDevice::generateVkDeviceQueueCreateInfoStruct(PhysicalDevice &physicalDevice,
+                                                                                 unsigned int queueFamilyIndex) {
 
         VkDeviceQueueCreateInfo queueCreateInfo{};
         queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
@@ -63,9 +62,5 @@ namespace Vulkan {
         }
 
         return createInfo;
-    }
-
-    void LogicalDevice::initializeGraphicsQueue(unsigned int queueFamilyIndex) {
-        vkGetDeviceQueue(device, queueFamilyIndex, 0, &graphicsQueue);
     }
 } // Vulkan
