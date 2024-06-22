@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.28)
 project(VulkanTutorial)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 add_executable(VulkanTutorial main.cpp
         App.cpp
@@ -20,7 +20,13 @@ add_executable(VulkanTutorial main.cpp
         Vulkan/LogicalDevice.h
         Vulkan/LogicalDevice.cpp
         Vulkan/Surface.cpp
-        Vulkan/Surface.h)
+        Vulkan/Surface.h
+        Logger/ILogger.h
+        Logger/ILogger.h
+        Logger/Logger.cpp
+        Logger/Logger.h
+        Logger/Logger.h
+)
 
 find_package(Vulkan REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE Vulkan::Vulkan)
