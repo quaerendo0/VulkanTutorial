@@ -6,19 +6,19 @@ namespace Vulkan {
 
     std::vector<VkPhysicalDevice> PhysicalDevice::listAvailableDevices() {
         uint32_t deviceCount = 0;
-        vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
+        vkEnumeratePhysicalDevices(referenceInstance, &deviceCount, nullptr);
 
         if (deviceCount == 0) {
             throw std::runtime_error("failed to find GPUs with Vulkan support!");
         }
 
         std::vector<VkPhysicalDevice> devices(deviceCount);
-        vkEnumeratePhysicalDevices(instance, &deviceCount, devices.data());
+        vkEnumeratePhysicalDevices(referenceInstance, &deviceCount, devices.data());
 
         return devices;
     }
 
-    PhysicalDevice::PhysicalDevice(VkInstance inst) : instance{inst} {
+    PhysicalDevice::PhysicalDevice(const VkInstance& inst) : referenceInstance{inst} {
         auto devices = listAvailableDevices();
 
         for (auto& device : devices) {

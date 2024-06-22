@@ -8,14 +8,14 @@ namespace Vulkan {
 
     class Debug {
     public:
-        Debug(bool enableValidationLayers, VkInstance instance);
+        Debug(bool enableValidationLayers, const VkInstance& instance);
 
         ~Debug();
 
         static VkDebugUtilsMessengerCreateInfoEXT populateDebugMessengerCreateInfo();
 
     private:
-        VkInstance referenceInstance = nullptr;
+        const VkInstance& referenceInstance;
         VkDebugUtilsMessengerEXT debugMessenger = nullptr;
 
         void setupDebugMessenger(bool enableValidationLayers, VkInstance instance);

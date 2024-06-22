@@ -16,20 +16,17 @@ namespace Vulkan {
 
     class Instance {
     public:
+        static const std::vector<const char *> validationLayers;
+
         explicit Instance(bool enableValidationLayers);
 
         ~Instance();
 
+        const VkInstance& getInstance() { return instance; }
+
     private:
-        const std::vector<const char *> validationLayers = {
-                "VK_LAYER_KHRONOS_validation"
-        };
 
         VkInstance instance = nullptr;
-
-        Debug* debug;
-        PhysicalDevice* physicalDevice;
-        LogicalDevice* logicalDevice;
 
         static std::vector<const char *> getRequiredExtensions(bool enableValidationLayers);
         void createInstance(bool enableValidationLayers);

@@ -16,14 +16,17 @@ namespace Vulkan {
 
     private:
         VkDevice device = nullptr;
+        VkQueue graphicsQueue = nullptr;
 
-        static VkDeviceQueueCreateInfo generateVkDeviceQueueCreateInfoStruct(PhysicalDevice& physicalDevice);
+        static VkDeviceQueueCreateInfo generateVkDeviceQueueCreateInfoStruct(PhysicalDevice& physicalDevice, unsigned int queueFamilyIndex);
         static VkPhysicalDeviceFeatures generateVkPhysicalDeviceFeaturesStruct();
         static VkDeviceCreateInfo generateVkDeviceCreateInfoStruct(
             VkDeviceQueueCreateInfo* queueCreateInfo,
             VkPhysicalDeviceFeatures* features,
             bool enableValidationLayers,
-            const std::vector<const char *>& validationLayers)
+            const std::vector<const char *>& validationLayers);
+
+        void initializeGraphicsQueue(unsigned int queueFamilyIndex);
     };
 
 }

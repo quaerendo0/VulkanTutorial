@@ -2,7 +2,7 @@
 
 namespace Vulkan {
 
-    Debug::Debug(bool enableValidationLayers, VkInstance instance) : referenceInstance{instance} {
+    Debug::Debug(bool enableValidationLayers, const VkInstance& instance) : referenceInstance{instance} {
         setupDebugMessenger(enableValidationLayers, instance);
     }
 

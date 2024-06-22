@@ -2,17 +2,15 @@
 
 namespace Vulkan {
 
+    const std::vector<const char *> Instance::validationLayers = {
+        "VK_LAYER_KHRONOS_validation"
+    };
+
     Instance::Instance(bool enableValidationLayers) {
         createInstance(enableValidationLayers);
-        debug = new Debug(enableValidationLayers, instance);
-        physicalDevice = new PhysicalDevice(instance);
-        logicalDevice = new LogicalDevice(*physicalDevice, validationLayers, enableValidationLayers);
     }
 
     Instance::~Instance() {
-        delete logicalDevice;
-        delete physicalDevice;
-        delete debug;
         vkDestroyInstance(instance, nullptr);
     }
 
@@ -65,7 +63,7 @@ namespace Vulkan {
         }
 
         if (vkCreateInstance(&createInfo, nullptr, &instance) != VK_SUCCESS) {
-            throw std::runtime_error("failed to create instance!");
+            throw std::runtime_error("failed to create referenceInstance!");
         }
     }
 

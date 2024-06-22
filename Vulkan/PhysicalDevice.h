@@ -16,7 +16,7 @@ namespace Vulkan {
     class PhysicalDevice {
 
     public:
-        explicit PhysicalDevice(VkInstance inst);
+        explicit PhysicalDevice(const VkInstance& inst);
         VkPhysicalDevice getPhysicalDevicePtr() { return physicalDevice; }
         QueueFamilyIndices getQueueFamilies();
 
@@ -26,7 +26,7 @@ namespace Vulkan {
         static QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
 
         VkPhysicalDevice physicalDevice = nullptr;
-        VkInstance instance = nullptr;
+        const VkInstance& referenceInstance;
     };
 
 }

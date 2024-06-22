@@ -18,7 +18,9 @@ add_executable(VulkanTutorial main.cpp
         Vulkan/LogicalDevice.cpp
         Vulkan/LogicalDevice.h
         Vulkan/LogicalDevice.h
-        Vulkan/LogicalDevice.cpp)
+        Vulkan/LogicalDevice.cpp
+        Vulkan/Surface.cpp
+        Vulkan/Surface.h)
 
 find_package(Vulkan REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE Vulkan::Vulkan)
