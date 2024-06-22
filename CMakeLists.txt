@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.28)
-project(VulkanTutorial)
+project(BromEngine)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(VulkanTutorial main.cpp
+add_executable(${PROJECT_NAME} main.cpp
         App.cpp
         App.h
         App.h
