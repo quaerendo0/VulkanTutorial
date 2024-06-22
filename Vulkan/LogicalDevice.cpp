@@ -9,7 +9,7 @@ namespace Vulkan {
     LogicalDevice::LogicalDevice(PhysicalDevice &physicalDevice,
                                  const std::vector<const char *> &validationLayers,
                                  bool enableValidationLayers) {
-        auto queueFamilyIndex = (physicalDevice.getQueueFamilies()).graphicsFamilyIndex.value();
+        auto queueFamilyIndex = (physicalDevice.getDeviceQueueFamiliesInfo()).graphicsFamilyIndex.value();
         auto queueCreateInfo = generateVkDeviceQueueCreateInfoStruct(physicalDevice, queueFamilyIndex);
         auto deviceFeatures = generateVkPhysicalDeviceFeaturesStruct();
         auto createInfo = generateVkDeviceCreateInfoStruct(&queueCreateInfo, &deviceFeatures, enableValidationLayers,

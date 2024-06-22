@@ -18,11 +18,15 @@ namespace Vulkan {
         return devices;
     }
 
-    PhysicalDevice::PhysicalDevice(const VkInstance& inst) : referenceInstance{inst} {
+    /*
+     * Creates physical device by using instance (main Vulkan entity) and window surface (VkSurfaceKHR), that was already created.
+     * If cannot create, throws exception.
+     */
+    PhysicalDevice::PhysicalDevice(const VkInstance& inst, const VkSurfaceKHR& surface) : referenceInstance{inst}, referenceSurface{surface} {
         auto devices = listAvailableDevices();
 
         for (auto& device : devices) {
-            if (isDeviceSuitable(device)) {
+            if (isDeviceSuitable(device, surface)) {
                 physicalDevice = device;
             }
         }
@@ -32,7 +36,7 @@ namespace Vulkan {
         }
     }
 
-    bool PhysicalDevice::isDeviceSuitable(VkPhysicalDevice device) {
+    bool PhysicalDevice::isDeviceSuitable(VkPhysicalDevice device, VkSurfaceKHR surface) {
         VkPhysicalDeviceProperties deviceProperties;
         VkPhysicalDeviceFeatures deviceFeatures;
         vkGetPhysicalDeviceProperties(device, &deviceProperties);
@@ -41,15 +45,15 @@ namespace Vulkan {
         bool suitable = deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU &&
                         deviceFeatures.geometryShader;
 
-        auto familyIndices = findQueueFamilies(device);
+        auto familyIndices = generateDeviceQueueFamiliesInfo(device, surface);
 
-        suitable = suitable && familyIndices.graphicsFamilyIndex.has_value();
+        suitable = suitable && familyIndices.supportsAllFamilies();
 
         return suitable;
     }
 
-    QueueFamilyIndices PhysicalDevice::findQueueFamilies(VkPhysicalDevice device) {
-        QueueFamilyIndices indices;
+    PhysicalDeviceQueueFamilyIndexInfo PhysicalDevice::generateDeviceQueueFamiliesInfo(VkPhysicalDevice device, VkSurfaceKHR surface) {
+        PhysicalDeviceQueueFamilyIndexInfo indices;
         uint32_t queueFamilyCount = 0;
         vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
 
@@ -62,13 +66,20 @@ namespace Vulkan {
                 indices.graphicsFamilyIndex = i;
             }
 
+            VkBool32 presentSupport = false;
+            vkGetPhysicalDeviceSurfaceSupportKHR(device, i, surface, &presentSupport);
+
+            if (presentSupport) {
+                indices.presentFamily = i;
+            }
+
             i++;
         }
 
         return indices;
     }
 
-    QueueFamilyIndices PhysicalDevice::getQueueFamilies() {
-        return findQueueFamilies(physicalDevice);
+    PhysicalDeviceQueueFamilyIndexInfo PhysicalDevice::getDeviceQueueFamiliesInfo() {
+        return generateDeviceQueueFamiliesInfo(physicalDevice, referenceSurface);
     }
 }
