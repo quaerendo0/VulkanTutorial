@@ -5,27 +5,17 @@
 #include <vector>
 #include <memory>
 #include "../Logger/ILogger.h"
+#include "PhysicalDeviceQueueFamilyIndexInfo.h"
 
 namespace Vulkan {
-
-    struct PhysicalDeviceQueueFamilyIndexInfo {
-        // Index in vkGetPhysicalDeviceQueueFamilyProperties returned array
-        // for the first family to support graphics commands
-        std::optional<uint32_t> graphicsFamilyIndex;
-        // support for windows presentation
-        std::optional<uint32_t> presentFamily;
-
-        bool supportsAllFamilies() const { return graphicsFamilyIndex.has_value() && presentFamily.has_value(); }
-    };
-
     class PhysicalDevice {
 
     public:
         PhysicalDevice(const VkInstance &inst, const VkSurfaceKHR &surface, const Log::ILogger &logger);
 
-        VkPhysicalDevice getPhysicalDevicePtr() { return physicalDevice; }
+        const VkPhysicalDevice &getPhysicalDevicePtr() const { return physicalDevice; }
 
-        PhysicalDeviceQueueFamilyIndexInfo getDeviceQueueFamiliesInfo();
+        PhysicalDeviceQueueFamilyIndexInfo getDeviceQueueFamiliesInfo() const;
 
     private:
         std::vector<VkPhysicalDevice> listAvailableDevices();
