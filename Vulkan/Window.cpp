@@ -9,7 +9,7 @@ void Vulkan::Window::initWindow(int w, int h) {
     window = glfwCreateWindow(width, height, "Vulkan", nullptr, nullptr);
 }
 
-Vulkan::Window::Window(int w, int h, const Log::ILogger& logger) : width{w}, height{h} {
+Vulkan::Window::Window(int w, int h, const Log::ILogger &logger) : width{w}, height{h} {
     initWindow(width, height);
     instance = new Instance(true, logger);
     debug = new Debug(enableValidationLayers, instance->getInstance(), logger);

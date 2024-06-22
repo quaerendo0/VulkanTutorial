@@ -10,10 +10,12 @@
 namespace Vulkan {
     class Window {
     public:
-        Window(int w, int h, const Log::ILogger& logger);
+        Window(int w, int h, const Log::ILogger &logger);
+
         ~Window();
 
         bool shouldClose();
+
         static void pollEvents();
 
     private:
@@ -27,9 +29,9 @@ namespace Vulkan {
         GLFWwindow *window = nullptr;
         Instance *instance;
 
-        Debug* debug;
-        Surface* surface;
-        PhysicalDevice* physicalDevice;
-        LogicalDevice* logicalDevice;
+        Debug *debug;
+        Surface *surface;
+        PhysicalDevice *physicalDevice;
+        LogicalDevice *logicalDevice;
     };
 }

@@ -21,19 +21,24 @@ namespace Vulkan {
     class PhysicalDevice {
 
     public:
-        PhysicalDevice(const VkInstance& inst, const VkSurfaceKHR& surface, const Log::ILogger& logger);
+        PhysicalDevice(const VkInstance &inst, const VkSurfaceKHR &surface, const Log::ILogger &logger);
+
         VkPhysicalDevice getPhysicalDevicePtr() { return physicalDevice; }
+
         PhysicalDeviceQueueFamilyIndexInfo getDeviceQueueFamiliesInfo();
 
     private:
         std::vector<VkPhysicalDevice> listAvailableDevices();
+
         static bool isDeviceSuitable(VkPhysicalDevice device, VkSurfaceKHR surface);
-        static PhysicalDeviceQueueFamilyIndexInfo generateDeviceQueueFamiliesInfo(VkPhysicalDevice device, VkSurfaceKHR surface);
+
+        static PhysicalDeviceQueueFamilyIndexInfo
+        generateDeviceQueueFamiliesInfo(VkPhysicalDevice device, VkSurfaceKHR surface);
 
         VkPhysicalDevice physicalDevice = nullptr;
-        const VkInstance& referenceInstance;
-        const VkSurfaceKHR& referenceSurface;
-        const Log::ILogger& logger;
+        const VkInstance &referenceInstance;
+        const VkSurfaceKHR &referenceSurface;
+        const Log::ILogger &logger;
     };
 
 }
