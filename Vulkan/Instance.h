@@ -27,9 +27,9 @@ namespace Vulkan {
 
         VkInstance instance = nullptr;
 
-        std::unique_ptr<Debug> debug;
-        std::unique_ptr<PhysicalDevice> physicalDevice;
-        std::unique_ptr<LogicalDevice> logicalDevice;
+        Debug* debug;
+        PhysicalDevice* physicalDevice;
+        LogicalDevice* logicalDevice;
 
         static std::vector<const char *> getRequiredExtensions(bool enableValidationLayers);
         void createInstance(bool enableValidationLayers);
