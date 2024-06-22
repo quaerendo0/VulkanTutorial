@@ -23,12 +23,12 @@ namespace Vulkan {
      * If cannot create, throws exception.
      */
     PhysicalDevice::PhysicalDevice(
-            const VkInstance& inst,
-            const VkSurfaceKHR& surface,
-            const Log::ILogger& logger) : referenceInstance{inst}, referenceSurface{surface}, logger{logger}  {
+            const VkInstance &inst,
+            const VkSurfaceKHR &surface,
+            const Log::ILogger &logger) : referenceInstance{inst}, referenceSurface{surface}, logger{logger} {
         auto devices = listAvailableDevices();
 
-        for (auto& device : devices) {
+        for (auto &device: devices) {
             VkPhysicalDeviceProperties deviceProps{};
             vkGetPhysicalDeviceProperties(device, &deviceProps);
             logger.LogInfo("Found device: " + std::string(deviceProps.deviceName));
@@ -60,7 +60,8 @@ namespace Vulkan {
         return suitable;
     }
 
-    PhysicalDeviceQueueFamilyIndexInfo PhysicalDevice::generateDeviceQueueFamiliesInfo(VkPhysicalDevice device, VkSurfaceKHR surface) {
+    PhysicalDeviceQueueFamilyIndexInfo
+    PhysicalDevice::generateDeviceQueueFamiliesInfo(VkPhysicalDevice device, VkSurfaceKHR surface) {
         PhysicalDeviceQueueFamilyIndexInfo indices;
         uint32_t queueFamilyCount = 0;
         vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
@@ -69,7 +70,7 @@ namespace Vulkan {
         vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilies.data());
 
         int i = 0;
-        for (const auto& queueFamily : queueFamilies) {
+        for (const auto &queueFamily: queueFamilies) {
             if (queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT) {
                 indices.graphicsFamilyIndex = i;
             }

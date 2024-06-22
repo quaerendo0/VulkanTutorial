@@ -18,19 +18,21 @@ namespace Vulkan {
     public:
         static const std::vector<const char *> validationLayers;
 
-        explicit Instance(bool enableValidationLayers, const Log::ILogger& logger);
+        explicit Instance(bool enableValidationLayers, const Log::ILogger &logger);
 
         ~Instance();
 
-        const VkInstance& getInstance() { return instance; }
+        const VkInstance &getInstance() { return instance; }
 
     private:
 
         VkInstance instance = nullptr;
-        const Log::ILogger& logger;
+        const Log::ILogger &logger;
 
         static std::vector<const char *> getRequiredExtensions(bool enableValidationLayers);
+
         void createInstance(bool enableValidationLayers);
+
         bool checkValidationLayerSupport();
     };
 

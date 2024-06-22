@@ -3,10 +3,10 @@
 namespace Vulkan {
 
     const std::vector<const char *> Instance::validationLayers = {
-        "VK_LAYER_KHRONOS_validation"
+            "VK_LAYER_KHRONOS_validation"
     };
 
-    Instance::Instance(bool enableValidationLayers, const Log::ILogger& logger) : logger{logger} {
+    Instance::Instance(bool enableValidationLayers, const Log::ILogger &logger) : logger{logger} {
         createInstance(enableValidationLayers);
     }
 

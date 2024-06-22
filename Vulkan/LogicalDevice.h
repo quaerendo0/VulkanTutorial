@@ -8,8 +8,8 @@ namespace Vulkan {
     class LogicalDevice {
 
     public:
-        LogicalDevice(PhysicalDevice& physicalDevice,
-                      const std::vector<const char *>& validationLayers,
+        LogicalDevice(PhysicalDevice &physicalDevice,
+                      const std::vector<const char *> &validationLayers,
                       bool enableValidationLayers);
 
         ~LogicalDevice();
@@ -18,13 +18,16 @@ namespace Vulkan {
         VkDevice device = nullptr;
         VkQueue graphicsQueue = nullptr;
 
-        static VkDeviceQueueCreateInfo generateVkDeviceQueueCreateInfoStruct(PhysicalDevice& physicalDevice, unsigned int queueFamilyIndex);
+        static VkDeviceQueueCreateInfo
+        generateVkDeviceQueueCreateInfoStruct(PhysicalDevice &physicalDevice, unsigned int queueFamilyIndex);
+
         static VkPhysicalDeviceFeatures generateVkPhysicalDeviceFeaturesStruct();
+
         static VkDeviceCreateInfo generateVkDeviceCreateInfoStruct(
-            VkDeviceQueueCreateInfo* queueCreateInfo,
-            VkPhysicalDeviceFeatures* features,
-            bool enableValidationLayers,
-            const std::vector<const char *>& validationLayers);
+                VkDeviceQueueCreateInfo *queueCreateInfo,
+                VkPhysicalDeviceFeatures *features,
+                bool enableValidationLayers,
+                const std::vector<const char *> &validationLayers);
     };
 
 }

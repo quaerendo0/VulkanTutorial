@@ -9,9 +9,10 @@ namespace Vulkan {
 
     class Debug {
     public:
-        static VkDebugUtilsMessengerCreateInfoEXT populateDebugMessengerCreateInfo(const Log::ILogger& logger);
+        static VkDebugUtilsMessengerCreateInfoEXT populateDebugMessengerCreateInfo(const Log::ILogger &logger);
 
-        Debug(bool enableValidationLayers, const VkInstance& instance, const Log::ILogger& logger);
+        Debug(bool enableValidationLayers, const VkInstance &instance, const Log::ILogger &logger);
+
         ~Debug();
 
     private:
@@ -31,7 +32,7 @@ namespace Vulkan {
                                                   VkDebugUtilsMessengerEXT debugMessenger,
                                                   const VkAllocationCallbacks *pAllocator);
 
-        const VkInstance& referenceInstance;
+        const VkInstance &referenceInstance;
         VkDebugUtilsMessengerEXT debugMessenger = nullptr;
     };
 
