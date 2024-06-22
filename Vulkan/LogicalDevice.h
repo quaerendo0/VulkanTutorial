@@ -15,7 +15,9 @@ namespace Vulkan {
 
         ~LogicalDevice();
 
-        const VkDevice &getDevicePtr() const { return device; }
+        [[nodiscard]] const VkDevice &getDevicePtr() const { return device; }
+
+        [[nodiscard]] const PhysicalDevice &getParentPhysicalDevice() const { return physicalDevice; }
 
     private:
         VkDevice device = nullptr;

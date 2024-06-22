@@ -1,3 +1,4 @@
+#include <set>
 #include "Instance.h"
 
 namespace Vulkan {
@@ -74,21 +75,11 @@ namespace Vulkan {
         std::vector<VkLayerProperties> availableLayers(layerCount);
         vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
 
-        for (const char *layerName: validationLayers) {
-            bool layerFound = false;
-
-            for (const auto &layerProperties: availableLayers) {
-                if (strcmp(layerName, layerProperties.layerName) == 0) {
-                    layerFound = true;
-                    break;
-                }
-            }
-
-            if (!layerFound) {
-                return false;
-            }
+        std::set<std::string> requiredLayers{validationLayers.begin(), validationLayers.end()};
+        for (const auto &layer: availableLayers) {
+            requiredLayers.erase(layer.layerName);
         }
 
-        return true;
+        return requiredLayers.empty();
     }
 } // Vulkan

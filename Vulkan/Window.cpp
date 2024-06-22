@@ -16,9 +16,11 @@ Vulkan::Window::Window(int w, int h, const Log::ILogger &logger) : width{w}, hei
     surface = new Surface(instance->getInstance(), window);
     physicalDevice = new PhysicalDevice(instance->getInstance(), surface->getSurface(), logger);
     logicalDevice = new LogicalDevice(*physicalDevice, Instance::validationLayers, enableValidationLayers);
+    swapChain = new SwapChain(*logicalDevice, *surface, window);
 }
 
 Vulkan::Window::~Window() {
+    delete swapChain;
     delete logicalDevice;
     delete physicalDevice;
     delete surface;

@@ -7,7 +7,7 @@ class Surface {
 public:
     Surface(const VkInstance &instance, GLFWwindow *window);
 
-    const VkSurfaceKHR &getSurface() { return surface; }
+    [[nodiscard]] const VkSurfaceKHR &getSurface() const { return surface; }
 
     ~Surface();
 
