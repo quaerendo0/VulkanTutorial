@@ -37,13 +37,13 @@ namespace Vulkan {
         auto *logger = static_cast<Log::ILogger *>(pUserData);
         switch (messageSeverity) {
             case VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT:
-                logger->LogError("validation layer: " + std::string(pCallbackData->pMessage));
+                logger->logError("validation layer: " + std::string(pCallbackData->pMessage));
                 break;
             case VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT:
-                logger->LogWarning("validation layer: " + std::string(pCallbackData->pMessage));
+                logger->logWarning("validation layer: " + std::string(pCallbackData->pMessage));
                 break;
             default:
-                logger->LogInfo("validation layer: " + std::string(pCallbackData->pMessage));
+                logger->logInfo("validation layer: " + std::string(pCallbackData->pMessage));
         }
 
         return VK_FALSE;

@@ -37,11 +37,11 @@ namespace Vulkan {
         for (auto &device: devices) {
             VkPhysicalDeviceProperties deviceProps{};
             vkGetPhysicalDeviceProperties(device, &deviceProps);
-            logger.LogInfo("Found device: " + std::string(deviceProps.deviceName) + ", checking suitability.");
+            logger.logInfo("Found device: " + std::string(deviceProps.deviceName) + ", checking suitability.");
 
             if (isDeviceSuitable(device, surface)) {
                 physicalDevice = device;
-                logger.LogInfo("Device \"" + std::string(deviceProps.deviceName) + "\" is suitable and initialized.");
+                logger.logInfo("Device \"" + std::string(deviceProps.deviceName) + "\" is suitable and initialized.");
             }
         }
 

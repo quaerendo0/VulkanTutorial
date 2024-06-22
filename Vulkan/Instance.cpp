@@ -15,13 +15,14 @@ namespace Vulkan {
         vkDestroyInstance(instance, nullptr);
     }
 
-    std::vector<const char *> Instance::getRequiredExtensions(bool enableValidationLayers) {
+    std::vector<const char *> Instance::getRequiredExtensions(bool enableValidationLayers, const Log::ILogger &logger) {
         uint32_t glfwExtensionCount = 0;
         const char **glfwExtensions;
         glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
 
         std::vector<const char *> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
 
+        Log::prettyLogCollection("Required extensions", extensions.begin(), extensions.end(), logger, Log::Info);
         if (enableValidationLayers) {
             extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
         }
@@ -46,7 +47,7 @@ namespace Vulkan {
         createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
         createInfo.pApplicationInfo = &appInfo;
 
-        auto extensions = getRequiredExtensions(enableValidationLayers);
+        auto extensions = getRequiredExtensions(enableValidationLayers, logger);
         createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
         createInfo.ppEnabledExtensionNames = extensions.data();
 

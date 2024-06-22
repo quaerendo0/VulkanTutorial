@@ -29,7 +29,7 @@ namespace Vulkan {
         VkInstance instance = nullptr;
         const Log::ILogger &logger;
 
-        static std::vector<const char *> getRequiredExtensions(bool enableValidationLayers);
+        static std::vector<const char *> getRequiredExtensions(bool enableValidationLayers, const Log::ILogger &logger);
 
         void createInstance(bool enableValidationLayers);
 

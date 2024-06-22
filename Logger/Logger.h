@@ -6,10 +6,12 @@
 namespace Log {
     class Logger : public ILogger {
     public:
-        void LogInfo(const std::string &data) const override;
+        void log(LogLevel logLevel, const std::string &data) const override;
 
-        void LogError(const std::string &data) const override;
+        void logInfo(const std::string &data) const override;
 
-        void LogWarning(const std::string &data) const override;
+        void logError(const std::string &data) const override;
+
+        void logWarning(const std::string &data) const override;
     };
 }
