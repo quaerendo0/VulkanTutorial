@@ -1,36 +1,51 @@
 #include <stdexcept>
+#include <set>
 #include "LogicalDevice.h"
 
 namespace Vulkan {
-    LogicalDevice::LogicalDevice(PhysicalDevice &physicalDevice,
+    LogicalDevice::LogicalDevice(const PhysicalDevice &physicalDevice,
                                  const std::vector<const char *> &validationLayers,
-                                 bool enableValidationLayers) {
-        auto queueFamilyIndex = (physicalDevice.getDeviceQueueFamiliesInfo()).graphicsFamilyIndex.value();
-        auto queueCreateInfo = generateVkDeviceQueueCreateInfoStruct(physicalDevice, queueFamilyIndex);
+                                 bool enableValidationLayers)
+            : physicalDevice{physicalDevice} {
+        auto familiesIndices = physicalDevice.getDeviceQueueFamiliesInfo();
+        auto queueCreateInfos = generateVkDeviceQueueCreateInfoStructs(physicalDevice, familiesIndices);
         auto deviceFeatures = generateVkPhysicalDeviceFeaturesStruct();
-        auto createInfo = generateVkDeviceCreateInfoStruct(&queueCreateInfo, &deviceFeatures, enableValidationLayers,
+        auto createInfo = generateVkDeviceCreateInfoStruct(queueCreateInfos, &deviceFeatures, enableValidationLayers,
                                                            validationLayers);
 
         if (vkCreateDevice(physicalDevice.getPhysicalDevicePtr(), &createInfo, nullptr, &device) != VK_SUCCESS) {
             throw std::runtime_error("failed to create logical device!");
         }
+
+        const auto graphIndex = physicalDevice.getDeviceQueueFamiliesInfo().graphicsFamily.value();
+        const auto presentIndex = physicalDevice.getDeviceQueueFamiliesInfo().presentFamily.value();
+        graphicsQueue = std::make_unique<Queue>(device, graphIndex);
+        presentQueue = std::make_unique<Queue>(device, presentIndex);
     }
 
     LogicalDevice::~LogicalDevice() {
         vkDestroyDevice(device, nullptr);
     }
 
-    VkDeviceQueueCreateInfo LogicalDevice::generateVkDeviceQueueCreateInfoStruct(PhysicalDevice &physicalDevice,
-                                                                                 unsigned int queueFamilyIndex) {
+    std::vector<VkDeviceQueueCreateInfo>
+    LogicalDevice::generateVkDeviceQueueCreateInfoStructs(const PhysicalDevice &physicalDevice,
+                                                          PhysicalDeviceQueueFamilyIndexInfo familiesIndexes) {
 
-        VkDeviceQueueCreateInfo queueCreateInfo{};
-        queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-        queueCreateInfo.queueFamilyIndex = queueFamilyIndex;
-        queueCreateInfo.queueCount = 1;
+        std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
+        std::set<uint32_t> uniqueQueueFamilies = {familiesIndexes.graphicsFamily.value(),
+                                                  familiesIndexes.presentFamily.value()};
+
         float queuePriority = 1.0f;
-        queueCreateInfo.pQueuePriorities = &queuePriority;
+        for (uint32_t queueFamily: uniqueQueueFamilies) {
+            VkDeviceQueueCreateInfo queueCreateInfo{};
+            queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+            queueCreateInfo.queueFamilyIndex = queueFamily;
+            queueCreateInfo.queueCount = 1;
+            queueCreateInfo.pQueuePriorities = &queuePriority;
+            queueCreateInfos.push_back(queueCreateInfo);
+        }
 
-        return queueCreateInfo;
+        return queueCreateInfos;
     }
 
     VkPhysicalDeviceFeatures LogicalDevice::generateVkPhysicalDeviceFeaturesStruct() {
@@ -38,15 +53,15 @@ namespace Vulkan {
     }
 
     VkDeviceCreateInfo LogicalDevice::generateVkDeviceCreateInfoStruct(
-            VkDeviceQueueCreateInfo *queueCreateInfo,
+            const std::vector<VkDeviceQueueCreateInfo> &queueCreateInfos,
             VkPhysicalDeviceFeatures *features,
             bool enableValidationLayers,
             const std::vector<const char *> &validationLayers) {
         VkDeviceCreateInfo createInfo{};
 
         createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-        createInfo.pQueueCreateInfos = queueCreateInfo;
-        createInfo.queueCreateInfoCount = 1;
+        createInfo.pQueueCreateInfos = queueCreateInfos.data();
+        createInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
         createInfo.pEnabledFeatures = features;
         createInfo.enabledExtensionCount = 0;
 

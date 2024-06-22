@@ -1,7 +1,5 @@
 #include "Queue.h"
-#include "LogicalDevice.h"
 
-Vulkan::Queue::Queue(const LogicalDevice& device, ) {
-
-    vkGetDeviceQueue(device, queueFamilyIndex, 0, &graphicsQueue);
+Vulkan::Queue::Queue(const VkDevice &device, uint32_t queueFamily) {
+    vkGetDeviceQueue(device, queueFamily, 0, &queue);
 }

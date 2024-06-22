@@ -5,8 +5,10 @@
 namespace Vulkan {
     class Queue {
     public:
-        Queue();
+        Queue(const VkDevice &device, uint32_t queueFamily);
+
     private:
+
         VkQueue queue = nullptr;
     };
 }

@@ -28,6 +28,7 @@ add_executable(${PROJECT_NAME} main.cpp
         Logger/Logger.h
         Vulkan/Queue.cpp
         Vulkan/Queue.h
+        Vulkan/PhysicalDeviceQueueFamilyIndexInfo.h
 )
 
 find_package(Vulkan REQUIRED)

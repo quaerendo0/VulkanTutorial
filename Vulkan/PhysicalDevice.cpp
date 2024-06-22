@@ -72,7 +72,7 @@ namespace Vulkan {
         int i = 0;
         for (const auto &queueFamily: queueFamilies) {
             if (queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT) {
-                indices.graphicsFamilyIndex = i;
+                indices.graphicsFamily = i;
             }
 
             VkBool32 presentSupport = false;
@@ -88,7 +88,7 @@ namespace Vulkan {
         return indices;
     }
 
-    PhysicalDeviceQueueFamilyIndexInfo PhysicalDevice::getDeviceQueueFamiliesInfo() {
+    PhysicalDeviceQueueFamilyIndexInfo PhysicalDevice::getDeviceQueueFamiliesInfo() const {
         return generateDeviceQueueFamiliesInfo(physicalDevice, referenceSurface);
     }
 }
