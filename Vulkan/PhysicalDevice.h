@@ -4,6 +4,7 @@
 #include <optional>
 #include <vector>
 #include <memory>
+#include "../Logger/ILogger.h"
 
 namespace Vulkan {
 
@@ -20,7 +21,7 @@ namespace Vulkan {
     class PhysicalDevice {
 
     public:
-        PhysicalDevice(const VkInstance& inst, const VkSurfaceKHR& surface);
+        PhysicalDevice(const VkInstance& inst, const VkSurfaceKHR& surface, const Log::ILogger& logger);
         VkPhysicalDevice getPhysicalDevicePtr() { return physicalDevice; }
         PhysicalDeviceQueueFamilyIndexInfo getDeviceQueueFamiliesInfo();
 
@@ -32,6 +33,7 @@ namespace Vulkan {
         VkPhysicalDevice physicalDevice = nullptr;
         const VkInstance& referenceInstance;
         const VkSurfaceKHR& referenceSurface;
+        const Log::ILogger& logger;
     };
 
 }

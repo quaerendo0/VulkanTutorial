@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Vulkan/Window.h"
+#include "Logger/Logger.h"
 
 namespace BromEngine {
 
@@ -9,7 +10,8 @@ namespace BromEngine {
         void run();
 
     private:
-        Vulkan::Window window{800, 600};
+        Log::Logger logger{};
+        Vulkan::Window window{800, 600, logger};
     };
 
 }

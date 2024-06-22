@@ -22,12 +22,20 @@ namespace Vulkan {
      * Creates physical device by using instance (main Vulkan entity) and window surface (VkSurfaceKHR), that was already created.
      * If cannot create, throws exception.
      */
-    PhysicalDevice::PhysicalDevice(const VkInstance& inst, const VkSurfaceKHR& surface) : referenceInstance{inst}, referenceSurface{surface} {
+    PhysicalDevice::PhysicalDevice(
+            const VkInstance& inst,
+            const VkSurfaceKHR& surface,
+            const Log::ILogger& logger) : referenceInstance{inst}, referenceSurface{surface}, logger{logger}  {
         auto devices = listAvailableDevices();
 
         for (auto& device : devices) {
+            VkPhysicalDeviceProperties deviceProps{};
+            vkGetPhysicalDeviceProperties(device, &deviceProps);
+            logger.LogInfo("Found device: " + std::string(deviceProps.deviceName));
+
             if (isDeviceSuitable(device, surface)) {
                 physicalDevice = device;
+                logger.LogInfo("Device \"" + std::string(deviceProps.deviceName) + "\" is suitable and initialized.");
             }
         }
 

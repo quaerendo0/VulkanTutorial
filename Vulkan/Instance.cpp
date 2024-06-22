@@ -6,7 +6,7 @@ namespace Vulkan {
         "VK_LAYER_KHRONOS_validation"
     };
 
-    Instance::Instance(bool enableValidationLayers) {
+    Instance::Instance(bool enableValidationLayers, const Log::ILogger& logger) : logger{logger} {
         createInstance(enableValidationLayers);
     }
 
@@ -54,7 +54,7 @@ namespace Vulkan {
             createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
             createInfo.ppEnabledLayerNames = validationLayers.data();
 
-            debugCreateInfo = Debug::populateDebugMessengerCreateInfo();
+            debugCreateInfo = Debug::populateDebugMessengerCreateInfo(logger);
             createInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT *) &debugCreateInfo;
         } else {
             createInfo.enabledLayerCount = 0;

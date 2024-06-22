@@ -10,7 +10,7 @@
 namespace Vulkan {
     class Window {
     public:
-        Window(int w, int h);
+        Window(int w, int h, const Log::ILogger& logger);
         ~Window();
 
         bool shouldClose();
