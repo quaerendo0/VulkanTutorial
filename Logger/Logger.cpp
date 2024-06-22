@@ -6,14 +6,28 @@
 #include <chrono>
 #include "Logger.h"
 
-void Log::Logger::LogInfo(const std::string &data) const {
-    std::cout << "[UTC " << std::chrono::utc_clock::now() << ']' << " (Info) : " << data << std::endl;
+void Log::Logger::logInfo(const std::string &data) const {
+    log(LogLevel::Info, data);
 }
 
-void Log::Logger::LogError(const std::string &data) const {
-    std::cerr << "[UTC " << std::chrono::utc_clock::now() << ']' << " (Error) : " << data << std::endl;
+void Log::Logger::logError(const std::string &data) const {
+    log(LogLevel::Error, data);
 }
 
-void Log::Logger::LogWarning(const std::string &data) const {
-    std::cout << "[UTC " << std::chrono::utc_clock::now() << ']' << " (Warning) : " << data << std::endl;
+void Log::Logger::logWarning(const std::string &data) const {
+    log(LogLevel::Warning, data);
+}
+
+void Log::Logger::log(LogLevel logLevel, const std::string &data) const {
+    switch (logLevel) {
+        case LogLevel::Info:
+            std::cout << "[UTC " << std::chrono::utc_clock::now() << ']' << " (Info) : " << data << std::endl;
+            break;
+        case LogLevel::Warning:
+            std::cout << "[UTC " << std::chrono::utc_clock::now() << ']' << " (Warning) : " << data << std::endl;
+            break;
+        case LogLevel::Error:
+            std::cerr << "[UTC " << std::chrono::utc_clock::now() << ']' << " (Error) : " << data << std::endl;
+            break;
+    }
 }
