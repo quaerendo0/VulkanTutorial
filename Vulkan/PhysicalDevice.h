@@ -7,26 +7,31 @@
 
 namespace Vulkan {
 
-    struct QueueFamilyIndices {
+    struct PhysicalDeviceQueueFamilyIndexInfo {
         // Index in vkGetPhysicalDeviceQueueFamilyProperties returned array
         // for the first family to support graphics commands
         std::optional<uint32_t> graphicsFamilyIndex;
+        // support for windows presentation
+        std::optional<uint32_t> presentFamily;
+
+        const bool supportsAllFamilies() const { return graphicsFamilyIndex.has_value() && presentFamily.has_value(); }
     };
 
     class PhysicalDevice {
 
     public:
-        explicit PhysicalDevice(const VkInstance& inst);
+        PhysicalDevice(const VkInstance& inst, const VkSurfaceKHR& surface);
         VkPhysicalDevice getPhysicalDevicePtr() { return physicalDevice; }
-        QueueFamilyIndices getQueueFamilies();
+        PhysicalDeviceQueueFamilyIndexInfo getDeviceQueueFamiliesInfo();
 
     private:
         std::vector<VkPhysicalDevice> listAvailableDevices();
-        static bool isDeviceSuitable(VkPhysicalDevice device);
-        static QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);
+        static bool isDeviceSuitable(VkPhysicalDevice device, VkSurfaceKHR surface);
+        static PhysicalDeviceQueueFamilyIndexInfo generateDeviceQueueFamiliesInfo(VkPhysicalDevice device, VkSurfaceKHR surface);
 
         VkPhysicalDevice physicalDevice = nullptr;
         const VkInstance& referenceInstance;
+        const VkSurfaceKHR& referenceSurface;
     };
 
 }

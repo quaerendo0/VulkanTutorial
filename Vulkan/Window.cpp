@@ -14,7 +14,7 @@ Vulkan::Window::Window(int w, int h) : width{w}, height{h} {
     instance = new Instance(true);
     debug = new Debug(enableValidationLayers, instance->getInstance());
     surface = new Surface(instance->getInstance(), window);
-    physicalDevice = new PhysicalDevice(instance->getInstance());
+    physicalDevice = new PhysicalDevice(instance->getInstance(), surface->getSurface());
     logicalDevice = new LogicalDevice(*physicalDevice, Instance::validationLayers, enableValidationLayers);
 }
 
