@@ -26,6 +26,8 @@ add_executable(VulkanTutorial main.cpp
         Logger/Logger.cpp
         Logger/Logger.h
         Logger/Logger.h
+        Vulkan/Queue.cpp
+        Vulkan/Queue.h
 )
 
 find_package(Vulkan REQUIRED)

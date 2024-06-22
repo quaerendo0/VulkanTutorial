@@ -1,7 +1,3 @@
-//
-// Created by Asus on 6/8/2024.
-//
-
 #include <stdexcept>
 #include "LogicalDevice.h"
 
@@ -63,9 +59,5 @@ namespace Vulkan {
         }
 
         return createInfo;
-    }
-
-    void LogicalDevice::initializeGraphicsQueue(unsigned int queueFamilyIndex) {
-        vkGetDeviceQueue(device, queueFamilyIndex, 0, &graphicsQueue);
     }
 } // Vulkan

@@ -25,8 +25,6 @@ namespace Vulkan {
             VkPhysicalDeviceFeatures* features,
             bool enableValidationLayers,
             const std::vector<const char *>& validationLayers);
-
-        void initializeGraphicsQueue(unsigned int queueFamilyIndex);
     };
 
 }
