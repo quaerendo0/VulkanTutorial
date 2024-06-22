@@ -33,7 +33,7 @@ namespace Vulkan {
 
         void createInstance(bool enableValidationLayers);
 
-        bool checkValidationLayerSupport();
+        static bool checkValidationLayerSupport();
     };
 
 } // Vulkan

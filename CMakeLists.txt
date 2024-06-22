@@ -29,6 +29,9 @@ add_executable(${PROJECT_NAME} main.cpp
         Vulkan/Queue.cpp
         Vulkan/Queue.h
         Vulkan/PhysicalDeviceQueueFamilyIndexInfo.h
+        Vulkan/SwapChainSupportDetails.h
+        Vulkan/SwapChain.cpp
+        Vulkan/SwapChain.h
 )
 
 find_package(Vulkan REQUIRED)

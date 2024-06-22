@@ -4,6 +4,7 @@
 #include "PhysicalDevice.h"
 #include "Instance.h"
 #include "Surface.h"
+#include "SwapChain.h"
 
 #pragma once
 
@@ -33,5 +34,6 @@ namespace Vulkan {
         Surface *surface;
         PhysicalDevice *physicalDevice;
         LogicalDevice *logicalDevice;
+        SwapChain *swapChain;
     };
 }
