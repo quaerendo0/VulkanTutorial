@@ -15,7 +15,7 @@ namespace Vulkan {
         // support for windows presentation
         std::optional<uint32_t> presentFamily;
 
-        const bool supportsAllFamilies() const { return graphicsFamilyIndex.has_value() && presentFamily.has_value(); }
+        bool supportsAllFamilies() const { return graphicsFamilyIndex.has_value() && presentFamily.has_value(); }
     };
 
     class PhysicalDevice {
