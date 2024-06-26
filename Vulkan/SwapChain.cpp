@@ -29,7 +29,13 @@ Vulkan::SwapChain::querySwapChainSupport(VkPhysicalDevice const &device, VkSurfa
     return details;
 }
 
+// If collection is empty or not found suitable, returns undefined format.
 VkSurfaceFormatKHR Vulkan::SwapChain::chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR> &availableFormats) {
+    if (availableFormats.empty()) {
+        VkSurfaceFormatKHR undefinedFormat;
+        return undefinedFormat;
+    }
+
     for (const auto &availableFormat: availableFormats) {
         if (availableFormat.format == VK_FORMAT_B8G8R8A8_SRGB &&
             availableFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
@@ -71,6 +77,10 @@ VkExtent2D Vulkan::SwapChain::chooseSwapExtent(const VkSurfaceCapabilitiesKHR &c
     }
 }
 
+bool surfaceFormatValid(VkSurfaceFormatKHR format) {
+    return format.format != VK_FORMAT_UNDEFINED;
+}
+
 Vulkan::SwapChain::SwapChain(const Vulkan::LogicalDevice &logicalDevice, const Surface &surface, GLFWwindow *window)
         : logicalDevice{logicalDevice} {
     auto physicalDevice = logicalDevice.getParentPhysicalDevice();
@@ -78,6 +88,11 @@ Vulkan::SwapChain::SwapChain(const Vulkan::LogicalDevice &logicalDevice, const S
                                                                      surface.getSurface());
 
     VkSurfaceFormatKHR surfaceFormat = chooseSwapSurfaceFormat(swapChainSupport.formats);
+
+    if (!surfaceFormatValid(surfaceFormat)) {
+        throw std::exception{"SwapChain ctor - Cannot init surface, format is undefined"};
+    }
+
     VkPresentModeKHR presentMode = chooseSwapPresentMode(swapChainSupport.presentModes);
     VkExtent2D extent = chooseSwapExtent(swapChainSupport.capabilities, window);
 

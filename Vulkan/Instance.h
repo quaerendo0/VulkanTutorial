@@ -8,7 +8,6 @@
 #include <iostream>
 #include <memory>
 
-#include "Debug.h"
 #include "PhysicalDevice.h"
 #include "LogicalDevice.h"
 
@@ -22,18 +21,13 @@ namespace Vulkan {
 
         ~Instance();
 
-        const VkInstance &getInstance() { return instance; }
+        [[nodiscard]] const VkInstance &getInstancePtr() const noexcept { return instance; }
 
     private:
+        void createInstance(bool enableValidationLayers);
 
         VkInstance instance = nullptr;
         const Log::ILogger &logger;
-
-        static std::vector<const char *> getRequiredExtensions(bool enableValidationLayers, const Log::ILogger &logger);
-
-        void createInstance(bool enableValidationLayers);
-
-        static bool checkValidationLayerSupport();
     };
 
 } // Vulkan

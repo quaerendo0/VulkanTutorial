@@ -2,6 +2,7 @@
 
 #include <string>
 #include <any>
+#include <concepts>
 
 namespace Log {
 
@@ -25,13 +26,37 @@ namespace Log {
         virtual void logError(const std::string &data) const = 0;
     };
 
+    template<class T>
+    concept StringLike =
+    requires(T a) {
+        {*a} -> std::convertible_to<std::string_view>;
+    };
 
     template<class T>
-    void prettyLogCollection(const std::string& collectionName, T begin, T end, const ILogger& logger, LogLevel level){
+    concept ConvetribleToString =
+    requires(T a) {
+        {std::to_string(*a)} -> std::same_as<std::string>;
+    };
+
+    template<StringLike T>
+    void prettyLog(const std::string &collectionName, T begin, T end, const ILogger &logger, LogLevel level) {
         unsigned int count = 0;
         std::string out{};
         while (begin != end) {
-            out = out + *begin + "; ";
+            out += std::string(*begin) + "; ";
+            count++;
+            begin++;
+        }
+        out = collectionName + " (total " + std::to_string(count) + ") { " + out + " }";
+        logger.log(level, out);
+    }
+
+    template<ConvetribleToString T>
+    void prettyLog(const std::string &collectionName, T begin, T end, const ILogger &logger, LogLevel level) {
+        unsigned int count = 0;
+        std::string out{};
+        while (begin != end) {
+            out += std::to_string(*begin) + "; ";
             count++;
             begin++;
         }

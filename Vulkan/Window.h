@@ -5,6 +5,7 @@
 #include "Instance.h"
 #include "Surface.h"
 #include "SwapChain.h"
+#include "Debug.h"
 
 #pragma once
 

@@ -10,71 +10,38 @@ namespace Vulkan {
             VK_KHR_SWAPCHAIN_EXTENSION_NAME
     };
 
-    std::vector<VkPhysicalDevice> PhysicalDevice::listAvailableDevices() {
+    std::vector<VkPhysicalDevice> listAvailableDevices(const VkInstance& instance) {
         uint32_t deviceCount = 0;
-        vkEnumeratePhysicalDevices(referenceInstance, &deviceCount, nullptr);
+        vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
 
         if (deviceCount == 0) {
             throw std::runtime_error("failed to find GPUs with Vulkan support!");
         }
 
         std::vector<VkPhysicalDevice> devices(deviceCount);
-        vkEnumeratePhysicalDevices(referenceInstance, &deviceCount, devices.data());
+        vkEnumeratePhysicalDevices(instance, &deviceCount, devices.data());
 
         return devices;
     }
 
-    /*
-     * Creates physical device by using instance (main Vulkan entity) and window surface (VkSurfaceKHR), that was already created.
-     * If cannot create, throws exception.
-     */
-    PhysicalDevice::PhysicalDevice(
-            const VkInstance &inst,
-            const VkSurfaceKHR &surface,
-            const Log::ILogger &logger) : referenceInstance{inst}, referenceSurface{surface}, logger{logger} {
-        auto devices = listAvailableDevices();
+    bool checkDeviceExtensionSupport(VkPhysicalDevice device) {
+        uint32_t extensionCount;
+        vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, nullptr);
 
-        for (auto &device: devices) {
-            VkPhysicalDeviceProperties deviceProps{};
-            vkGetPhysicalDeviceProperties(device, &deviceProps);
-            logger.logInfo("Found device: " + std::string(deviceProps.deviceName) + ", checking suitability.");
+        std::vector<VkExtensionProperties> availableExtensions(extensionCount);
+        vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, availableExtensions.data());
 
-            if (isDeviceSuitable(device, surface)) {
-                physicalDevice = device;
-                logger.logInfo("Device \"" + std::string(deviceProps.deviceName) + "\" is suitable and initialized.");
-            }
+        std::set<std::string> requiredExtensions(PhysicalDevice::deviceExtensions.begin(), PhysicalDevice::deviceExtensions.end());
+
+        for (const auto &extension: availableExtensions) {
+            requiredExtensions.erase(extension.extensionName);
         }
 
-        if (physicalDevice == VK_NULL_HANDLE) {
-            throw std::runtime_error("failed to find a suitable GPU!");
-        }
-    }
-
-    bool PhysicalDevice::isDeviceSuitable(VkPhysicalDevice device, VkSurfaceKHR surface) {
-        VkPhysicalDeviceProperties deviceProperties;
-        VkPhysicalDeviceFeatures deviceFeatures;
-        vkGetPhysicalDeviceProperties(device, &deviceProperties);
-        vkGetPhysicalDeviceFeatures(device, &deviceFeatures);
-
-        bool suitable = deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU &&
-                        deviceFeatures.geometryShader;
-
-        bool extensionsSupported = checkDeviceExtensionSupport(device);
-
-        auto familyIndices = generateDeviceQueueFamiliesInfo(device, surface);
-
-        bool swapChainAdequate = false;
-        if (extensionsSupported) {
-            SwapChainSupportDetails swapChainSupport = SwapChain::querySwapChainSupport(device, surface);
-            swapChainAdequate = !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
-        }
-        suitable = suitable && familyIndices.supportsAllFamilies() && extensionsSupported && swapChainAdequate;
-
-        return suitable;
+        return requiredExtensions.empty();
     }
 
     PhysicalDeviceQueueFamilyIndexInfo
-    PhysicalDevice::generateDeviceQueueFamiliesInfo(VkPhysicalDevice device, VkSurfaceKHR surface) {
+    generateDeviceQueueFamiliesInfo(VkPhysicalDevice device, VkSurfaceKHR surface) {
         PhysicalDeviceQueueFamilyIndexInfo indices;
         uint32_t queueFamilyCount = 0;
         vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
@@ -101,23 +68,57 @@ namespace Vulkan {
         return indices;
     }
 
+    bool isDeviceSuitable(VkPhysicalDevice device, VkSurfaceKHR surface) {
+        VkPhysicalDeviceProperties deviceProperties;
+        VkPhysicalDeviceFeatures deviceFeatures;
+        vkGetPhysicalDeviceProperties(device, &deviceProperties);
+        vkGetPhysicalDeviceFeatures(device, &deviceFeatures);
+
+        bool suitable = deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU &&
+                        deviceFeatures.geometryShader;
+
+        bool extensionsSupported = checkDeviceExtensionSupport(device);
+
+        const auto familyIndices = generateDeviceQueueFamiliesInfo(device, surface);
+
+        bool swapChainAdequate = false;
+        if (extensionsSupported) {
+            SwapChainSupportDetails swapChainSupport = SwapChain::querySwapChainSupport(device, surface);
+            swapChainAdequate = !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
+        }
+        suitable = suitable && familyIndices.supportsAllFamilies() && extensionsSupported && swapChainAdequate;
+
+        return suitable;
+    }
+
+    /*
+     * Creates physical device by using instance (main Vulkan entity) and window surface (VkSurfaceKHR), that was already created.
+     * If cannot create, throws exception.
+     */
+    PhysicalDevice::PhysicalDevice(
+            const VkInstance &inst,
+            const VkSurfaceKHR &surface,
+            const Log::ILogger &logger) : referenceInstance{inst}, referenceSurface{surface}, logger{logger} {
+        const auto devices = listAvailableDevices(inst);
+
+        for (auto &device: devices) {
+            VkPhysicalDeviceProperties deviceProps{};
+            vkGetPhysicalDeviceProperties(device, &deviceProps);
+            logger.logInfo("Found device: " + std::string(deviceProps.deviceName) + ", checking suitability.");
+
+            if (isDeviceSuitable(device, surface)) {
+                physicalDevice = device;
+                logger.logInfo("Device \"" + std::string(deviceProps.deviceName) + "\" is suitable and initialized.");
+            }
+        }
+
+        if (physicalDevice == VK_NULL_HANDLE) {
+            throw std::runtime_error("failed to find a suitable GPU!");
+        }
+    }
+
     PhysicalDeviceQueueFamilyIndexInfo PhysicalDevice::getDeviceQueueFamiliesInfo() const {
         return generateDeviceQueueFamiliesInfo(physicalDevice, referenceSurface);
     }
 
-    bool PhysicalDevice::checkDeviceExtensionSupport(VkPhysicalDevice device) {
-        uint32_t extensionCount;
-        vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, nullptr);
-
-        std::vector<VkExtensionProperties> availableExtensions(extensionCount);
-        vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, availableExtensions.data());
-
-        std::set<std::string> requiredExtensions(deviceExtensions.begin(), deviceExtensions.end());
-
-        for (const auto &extension: availableExtensions) {
-            requiredExtensions.erase(extension.extensionName);
-        }
-
-        return requiredExtensions.empty();
-    }
 }

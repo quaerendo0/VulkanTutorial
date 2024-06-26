@@ -21,15 +21,6 @@ namespace Vulkan {
 
     private:
 
-        static bool isDeviceSuitable(VkPhysicalDevice device, VkSurfaceKHR surface);
-
-        static PhysicalDeviceQueueFamilyIndexInfo
-        generateDeviceQueueFamiliesInfo(VkPhysicalDevice device, VkSurfaceKHR surface);
-
-        static bool checkDeviceExtensionSupport(VkPhysicalDevice device);
-
-        std::vector<VkPhysicalDevice> listAvailableDevices();
-
         VkPhysicalDevice physicalDevice = nullptr;
         const VkInstance &referenceInstance;
         const VkSurfaceKHR &referenceSurface;
