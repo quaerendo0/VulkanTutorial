@@ -47,7 +47,8 @@ namespace Vulkan {
         if (!enableValidationLayers) return;
 
         const auto createInfo = populateDebugMessengerCreateInfo(logger);
-        if (createDebugUtilsMessengerExt(instance.getInstancePtr(), &createInfo, nullptr, &debugMessenger) != VK_SUCCESS) {
+        if (createDebugUtilsMessengerExt(instance.getInstancePtr(), &createInfo, nullptr, &debugMessenger) !=
+            VK_SUCCESS) {
             throw std::runtime_error("failed to set up debug messenger!");
         }
     }

@@ -32,6 +32,10 @@ add_executable(${PROJECT_NAME} main.cpp
         Vulkan/SwapChainSupportDetails.h
         Vulkan/SwapChain.cpp
         Vulkan/SwapChain.h
+        Vulkan/GraphicsPipeline.cpp
+        Vulkan/GraphicsPipeline.h
+        Vulkan/RenderPass.cpp
+        Vulkan/RenderPass.h
 )
 
 find_package(Vulkan REQUIRED)

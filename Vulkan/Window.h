@@ -6,6 +6,8 @@
 #include "Surface.h"
 #include "SwapChain.h"
 #include "Debug.h"
+#include "RenderPass.h"
+#include "GraphicsPipeline.h"
 
 #pragma once
 
@@ -31,10 +33,12 @@ namespace Vulkan {
         GLFWwindow *window = nullptr;
         Instance *instance;
 
-        Debug *debug;
-        Surface *surface;
-        PhysicalDevice *physicalDevice;
-        LogicalDevice *logicalDevice;
-        SwapChain *swapChain;
+        Debug *debug = nullptr;
+        Surface *surface = nullptr;
+        PhysicalDevice *physicalDevice = nullptr;
+        LogicalDevice *logicalDevice = nullptr;
+        SwapChain *swapChain = nullptr;
+        RenderPass *renderPass = nullptr;
+        GraphicsPipeline *graphicsPipeline = nullptr;
     };
 }
