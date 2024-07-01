@@ -52,6 +52,7 @@ namespace Vulkan {
 
         return createInfo;
     }
+
     LogicalDevice::LogicalDevice(const PhysicalDevice &physicalDevice,
                                  const std::vector<const char *> &validationLayers,
                                  bool enableValidationLayers)
@@ -59,8 +60,9 @@ namespace Vulkan {
         const auto familiesIndices = physicalDevice.getDeviceQueueFamiliesInfo();
         const auto queueCreateInfos = generateVkDeviceQueueCreateInfoStructs(physicalDevice, familiesIndices);
         const auto deviceFeatures = generateVkPhysicalDeviceFeaturesStruct();
-        const auto createInfo = generateVkDeviceCreateInfoStruct(queueCreateInfos, &deviceFeatures, enableValidationLayers,
-                                                           validationLayers);
+        const auto createInfo = generateVkDeviceCreateInfoStruct(queueCreateInfos, &deviceFeatures,
+                                                                 enableValidationLayers,
+                                                                 validationLayers);
 
         if (vkCreateDevice(physicalDevice.getPhysicalDevicePtr(), &createInfo, nullptr, &device) != VK_SUCCESS) {
             throw std::runtime_error("failed to create logical device!");

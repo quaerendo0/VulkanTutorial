@@ -10,7 +10,7 @@ namespace Vulkan {
             VK_KHR_SWAPCHAIN_EXTENSION_NAME
     };
 
-    std::vector<VkPhysicalDevice> listAvailableDevices(const VkInstance& instance) {
+    std::vector<VkPhysicalDevice> listAvailableDevices(const VkInstance &instance) {
         uint32_t deviceCount = 0;
         vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
 
@@ -31,7 +31,8 @@ namespace Vulkan {
         std::vector<VkExtensionProperties> availableExtensions(extensionCount);
         vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, availableExtensions.data());
 
-        std::set<std::string> requiredExtensions(PhysicalDevice::deviceExtensions.begin(), PhysicalDevice::deviceExtensions.end());
+        std::set<std::string> requiredExtensions(PhysicalDevice::deviceExtensions.begin(),
+                                                 PhysicalDevice::deviceExtensions.end());
 
         for (const auto &extension: availableExtensions) {
             requiredExtensions.erase(extension.extensionName);
