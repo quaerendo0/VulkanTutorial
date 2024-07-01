@@ -34,6 +34,8 @@ namespace Vulkan {
 
         [[nodiscard]] const VkExtent2D &getSwapChainExtent() const noexcept { return swapChainExtent; }
 
+        [[nodiscard]] const VkFormat &getSwapChainImageFormat() const noexcept { return swapChainImageFormat; }
+
     private:
         VkSwapchainKHR swapChain;
         const LogicalDevice &logicalDevice;

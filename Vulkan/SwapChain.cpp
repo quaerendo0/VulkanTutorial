@@ -179,7 +179,7 @@ Vulkan::SwapChain::SwapChain(const Vulkan::LogicalDevice &logicalDevice, const S
 }
 
 Vulkan::SwapChain::~SwapChain() {
-    for (auto imageView : swapChainImageViews) {
+    for (auto imageView: swapChainImageViews) {
         vkDestroyImageView(logicalDevice.getDevicePtr(), imageView, nullptr);
     }
 

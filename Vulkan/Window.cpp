@@ -17,9 +17,13 @@ Vulkan::Window::Window(int w, int h, const Log::ILogger &logger) : width{w}, hei
     physicalDevice = new PhysicalDevice{instance->getInstancePtr(), surface->getSurface(), logger};
     logicalDevice = new LogicalDevice{*physicalDevice, Instance::validationLayers, enableValidationLayers};
     swapChain = new SwapChain{*logicalDevice, *surface, window, logger};
+    renderPass = new RenderPass{*swapChain, *logicalDevice};
+    graphicsPipeline = new GraphicsPipeline{*logicalDevice, *swapChain, *renderPass};
 }
 
 Vulkan::Window::~Window() {
+    delete graphicsPipeline;
+    delete renderPass;
     delete swapChain;
     delete logicalDevice;
     delete physicalDevice;
